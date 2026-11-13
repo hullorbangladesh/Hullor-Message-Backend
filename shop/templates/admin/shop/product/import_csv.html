@@ -1,0 +1,22 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a> &rsaquo;
+  <a href="{% url 'admin:shop_product_changelist' %}">Products</a> &rsaquo; Import CSV
+</div>
+{% endblock %}
+{% block content %}
+<div id="content-main">
+  <p>
+    Required columns: <code>name</code>, <code>price</code>.<br>
+    Optional columns: <code>sku</code>, <code>name_bn</code>, <code>category</code>, <code>keywords</code>,
+    <code>description</code>, <code>stock</code>, <code>image_url</code>, <code>is_active</code>.<br>
+    Rows with the same <code>sku</code> are updated, new ones are created. Save from Excel/Google Sheets as CSV (UTF-8).
+  </p>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p><input type="file" name="csv_file" accept=".csv,text/csv" required></p>
+    <input type="submit" value="Import" class="default">
+  </form>
+</div>
+{% endblock %}

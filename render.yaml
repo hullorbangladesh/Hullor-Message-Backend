@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: shop-bot
+    runtime: python
+    plan: free
+    buildCommand: bash build.sh
+    # 1 worker + threads: keeps memory low on the free plan and lets per-customer locking work.
+    startCommand: gunicorn config.wsgi:application --workers 1 --threads 8 --timeout 60 --bind 0.0.0.0:$PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: SHOP_NAME
+        value: My Shop
+      - key: GEMINI_MODEL
+        value: gemini-flash-lite-latest
+      # Secrets: Render asks you to type these in the dashboard. Never put them in this file.
+      - key: DATABASE_URL
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: META_APP_SECRET
+        sync: false
+      - key: PAGE_ACCESS_TOKEN
+        sync: false
+      - key: VERIFY_TOKEN
+        sync: false
+      - key: ADMIN_API_TOKEN
+        sync: false
+      - key: DJANGO_SUPERUSER_USERNAME
+        sync: false
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false
